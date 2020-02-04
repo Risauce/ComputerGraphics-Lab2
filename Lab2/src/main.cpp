@@ -43,6 +43,23 @@ int main()
         return -1;
     }
 
+    float positions[6] = {
+        -.5f, -.5f,
+        0.0f, 0.5f,
+        0.5f, -0.5f
+
+    };
+
+    unsigned int buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0); // This tells OpenGL how to organize the buffer.
+    
+
+
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -58,6 +75,9 @@ int main()
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
