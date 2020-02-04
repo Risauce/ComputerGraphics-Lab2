@@ -5,7 +5,16 @@
 #include <string>
 using namespace std;
 
+/* ----------------------------------------------------------------------------
+// Authors: Anna Jinneman & William Roberts
+// Date completed: 2/3/2020
+// Resources used: The Cherno (Youtube Tutorial), Learn OpenGL (Website Tutorial)
+// ----------------------------------------------------------------------------
+// This program will use OpenGL to create a RGB Triangle from user input.
+-----------------------------------------------------------------------------*/
 
+
+//The structure for the Point we use to organize our data. Simple stuff.
 struct point {
     float x;
     float y;
@@ -16,6 +25,7 @@ struct point {
 
 };
 
+//Mainly for debugging, and for outputting data to the screen.
 std::ostream& operator<<(std::ostream& stream, const point& v) {
     // std::cout is a std::ostream object, just like stream
     // so use stream as if it were cout and output the components of
@@ -26,8 +36,8 @@ std::ostream& operator<<(std::ostream& stream, const point& v) {
     return stream;
 }
 
-
-static unsigned int CompileShader(unsigned int type, const std::string& source)
+// Compiles the source of the basic shaders below
+static unsigned int CompileShader(unsigned int type, const std::string& source) //This compiles the source
 {
     unsigned int id = glCreateShader(type);
     const char* src = source.c_str();
@@ -36,13 +46,15 @@ static unsigned int CompileShader(unsigned int type, const std::string& source)
 
     int result;
     glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+
+    //Basic Debugger to check what failed to compile
     if (result == GL_FALSE) {
         int length;
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        char* message = (char*)alloca(length * sizeof(char));
+        char* message = (char*)alloca(length * sizeof(char)); //Allocates a generic length char array. This shouldn't ever be called, but works if it is.
         glGetShaderInfoLog(id, length, &length, message);
         std::cout << "Failed to compile" << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << "shader!"  << std::endl;
-        std::cout << message << std::endl;
+        std::cout << message << std::endl; //Gives a decent error message. 
         glDeleteShader(id);
 
         return 0;
@@ -52,6 +64,7 @@ static unsigned int CompileShader(unsigned int type, const std::string& source)
     return id;
 }
 
+// Run compiler on the vs and fs, links them to the program, then deletes them.
 static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader) 
 {
     unsigned int program = glCreateProgram();
@@ -76,15 +89,16 @@ void processInput(GLFWwindow* window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-/*
-//For some reason this didn't work.
+
 void normalizeCoord(point* point) //This function updates the values to normalize values (-1 to 1)
 {
-    point->x = (-1 + point->x * (2 / SCR_WIDTH)); 
-    point->y = (1 - point->y * (2 / SCR_HEIGHT));
+    point->x = (-1.0f + point->x * (2.0f / (float)SCR_WIDTH)); 
+    point->y = (1.0f - point->y * (2.0f / (float)SCR_HEIGHT));
 }
-*/
 
+
+
+/* These functions will convert normal coords to window coords. We didn't end up using these (for obvious reasons)
 float w2ndx(float x)
 {
     float result = -1.0f + (x * (2.0f / 800.0f));
@@ -96,6 +110,8 @@ float w2ndy(float y)
     float result = 1.0f - (y * (2.0f / 600.0f));
     return result;
 }
+*/
+
 
 //------------------------------------------------------------------------------------
 int main()
@@ -140,7 +156,7 @@ int main()
     point c;
 
 
-    // Prompt:
+    // User Input Prompt:
     cout << "Enter 3 points (enter a point as x,y:r,g,b): " << endl;
 
     cout << "Enter point 1: " << endl;
@@ -158,13 +174,13 @@ int main()
     cout << "You entered: " << endl;
     cout << a << b << c << endl;
 
-    /*
+    
     normalizeCoord(&a);
     normalizeCoord(&b);
     normalizeCoord(&c);
 
-    */
-
+    
+    /*
     a.x = w2ndx(a.x);
     a.y = w2ndy(a.y);
 
@@ -173,6 +189,7 @@ int main()
 
     c.x = w2ndx(c.x);
     c.y = w2ndy(c.y);
+    */
 
     cout << "Converted: " << endl;
     cout << a << b << c << endl;
@@ -184,6 +201,7 @@ int main()
 
     };
 
+    //Buffer and VertexArray initialization:
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -199,6 +217,7 @@ int main()
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
 
+    // Basic Shaders for the vertexShader and fragmentShader
     std::string vertexShader =
         "#version 330 core\n"
         "\n"
@@ -254,6 +273,7 @@ int main()
     // ------------------------------------------------------------------
 
     glDeleteProgram(shader);
+
     glfwTerminate();
     return 0;
 }
