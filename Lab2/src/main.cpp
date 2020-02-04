@@ -2,6 +2,30 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <string>
+using namespace std;
+
+
+struct point {
+    float x;
+    float y;
+
+    float r;
+    float g;
+    float b;
+
+};
+
+std::ostream& operator<<(std::ostream& stream, const point& v) {
+    // std::cout is a std::ostream object, just like stream
+    // so use stream as if it were cout and output the components of
+    // the vector
+
+    stream << v.x << ", " << v.y << ": " << v.r << ", " << v.g << ", " << v.b << endl;
+
+    return stream;
+}
+
 
 static unsigned int CompileShader(unsigned int type, const std::string& source)
 {
@@ -52,6 +76,28 @@ void processInput(GLFWwindow* window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+/*
+//For some reason this didn't work.
+void normalizeCoord(point* point) //This function updates the values to normalize values (-1 to 1)
+{
+    point->x = (-1 + point->x * (2 / SCR_WIDTH)); 
+    point->y = (1 - point->y * (2 / SCR_HEIGHT));
+}
+*/
+
+float w2ndx(float x)
+{
+    float result = -1.0f + (x * (2.0f / 800.0f));
+    return result;
+}
+
+float w2ndy(float y)
+{
+    float result = 1.0f - (y * (2.0f / 600.0f));
+    return result;
+}
+
+//------------------------------------------------------------------------------------
 int main()
 {
     // glfw: initialize and configure
@@ -85,10 +131,56 @@ int main()
         return -1;
     }
 
-    float positions[6] = {
-        -.5f, -.5f,
-        0.0f, 0.5f,
-        0.5f, -0.5f
+
+    // Set up Data initialization:
+    // ---------------------------------------
+
+    point a;
+    point b;
+    point c;
+
+
+    // Prompt:
+    cout << "Enter 3 points (enter a point as x,y:r,g,b): " << endl;
+
+    cout << "Enter point 1: " << endl;
+    string userInput1;
+    cin >> a.x >> a.y >> a.r >> a.g >> a.b;
+
+    cout << "Enter point 2: " << endl;
+    string userInput2;
+    cin >> b.x >> b.y >> b.r >> b.g >> b.b;
+
+    cout << "Enter point 3: " << endl;
+    string userInput3;
+    cin >> c.x >> c.y >> c.r >> c.g >> c.b;
+
+    cout << "You entered: " << endl;
+    cout << a << b << c << endl;
+
+    /*
+    normalizeCoord(&a);
+    normalizeCoord(&b);
+    normalizeCoord(&c);
+
+    */
+
+    a.x = w2ndx(a.x);
+    a.y = w2ndy(a.y);
+
+    b.x = w2ndx(b.x);
+    b.y = w2ndy(b.y);
+
+    c.x = w2ndx(c.x);
+    c.y = w2ndy(c.y);
+
+    cout << "Converted: " << endl;
+    cout << a << b << c << endl;
+
+    float positions[] = {
+        a.x, a.y, 0.0f, a.r, a.g, a.b, 
+        b.x, b.y, 0.0f, b.r, b.g, b.b,
+        c.x, c.y, 0.0f, c.r, c.g, c.b
 
     };
 
@@ -99,29 +191,36 @@ int main()
     unsigned int buffer;
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0); // This tells OpenGL how to organize the buffer.
     
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0); // This tells OpenGL how to organize the buffer.
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(3 * sizeof(float))); // This tells OpenGL how to organize the buffer.
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
     std::string vertexShader =
         "#version 330 core\n"
         "\n"
         "layout(location = 0) in vec4 position;\n"
+        "layout (location = 1) in vec3 aColor;\n"
         "\n"
+        "out vec3 ourColor;\n"
         "void main()\n"
         "{\n"
         "   gl_Position = position;\n"
+        "   ourColor = aColor; \n"
         "}\n";
 
     std::string fragmentShader =
         "#version 330 core\n"
         "\n"
-        "layout(location = 0)out vec4 color;"
+        "layout(location = 0)out vec4 color;\n"
+        "in vec3 ourColor;\n"
         "\n"
         "void main()\n"
         "{\n"
-        "   color = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "   color = vec4(ourColor, 1.0);\n"
         "}\n";
 
     unsigned int shader = CreateShader(vertexShader, fragmentShader);
@@ -133,15 +232,17 @@ int main()
     {
         // input
         // -----
-        //processInput(window);
+        processInput(window);
 
         // render
         // ------
-        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
+
+        
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
 
