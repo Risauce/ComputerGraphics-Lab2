@@ -113,7 +113,9 @@ float w2ndy(float y)
 */
 
 
-//------------------------------------------------------------------------------------
+//-------------------MAIN-----------------------------------------------------------------
+
+/*
 int main()
 {
     // glfw: initialize and configure
@@ -179,17 +181,7 @@ int main()
     normalizeCoord(&b);
     normalizeCoord(&c);
 
-    
-    /*
-    a.x = w2ndx(a.x);
-    a.y = w2ndy(a.y);
-
-    b.x = w2ndx(b.x);
-    b.y = w2ndy(b.y);
-
-    c.x = w2ndx(c.x);
-    c.y = w2ndy(c.y);
-    */
+   
 
     cout << "Converted: " << endl;
     cout << a << b << c << endl;
@@ -278,6 +270,8 @@ int main()
     return 0;
 }
 
+
+
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
@@ -294,3 +288,5 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
+
+*/

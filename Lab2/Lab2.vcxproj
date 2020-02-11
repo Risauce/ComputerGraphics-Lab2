@@ -147,7 +147,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\lab3.cpp" />
     <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\frag.glsl" />
+    <None Include="..\vert.glsl" />
+    <None Include="src\frag.glsl" />
+    <None Include="src\vert.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\matrix.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

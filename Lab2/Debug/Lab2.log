@@ -1,2 +1,8 @@
-﻿  main.cpp
+﻿  lab3.cpp
+C:\dev\OpenGL\Lab2\Lab2\src\lab3.cpp(146,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\dev\OpenGL\Lab2\Lab2\src\lab3.cpp(159,61): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\dev\OpenGL\Lab2\Lab2\src\lab3.cpp(159,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\dev\OpenGL\Lab2\Lab2\src\lab3.cpp(164,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\dev\OpenGL\Lab2\Lab2\src\lab3.cpp(166,65): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\dev\OpenGL\Lab2\Lab2\src\lab3.cpp(166,38): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   Lab2.vcxproj -> C:\dev\OpenGL\Lab2\Debug\Lab2.exe
